@@ -1,27 +1,5 @@
-# UltimateCaptcha by SoyDavs
-# All settings are customizable
+# The throw power applied to players when they step on the trampoline
+throwPower: 2.0
 
-Captcha:
-  ShowOnEveryJoin: false
-  MaxAttempts: 3
-  NotifyOnSuspicious: true
-  CaptchaType: "TEXT"
-  RandomTextLength: 6
-  UseCaseSensitive: true
-  ResendFormDelay: 10
-  BlockMovement: true
-  BlockInteract: true
-  BlockCommands: true
-  BlockChat: true
-
-Messages:
-  Title: "§l§bUltimateCaptcha"
-  Description: "Please complete this captcha to unlock!"
-  WrongAnswer: "§cIncorrect captcha. Try again!"
-  CorrectAnswer: "§aYou have passed the captcha!"
-  SuspiciousAlert: "§cYou have exceeded the maximum attempts!"
-  BlockedInteract: "§cYou must complete the captcha first!"
-
-Discord:
-  WebhookURL: "https://discord.com/api/webhooks/XXXXX/XXXXX"
-  SuspiciousMessage: "Player {player} might be a bot! Too many captcha failures."
+# Enable or disable slime particles when the player jumps
+enableSlimeParticles: true
