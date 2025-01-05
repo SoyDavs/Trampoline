@@ -1,0 +1,14 @@
+name: Trampoline
+version: 1.0.0
+main: Trampoline\Main
+api: 5.0.0
+author: "SoyDavs"
+description: "Customizable trampolines for PocketMine-MP"
+commands:
+  trampoline:
+    description: "Main command to manage trampolines"
+    usage: "/trampoline <set|remove|edit|list> [params]"
+    permission: "trampoline.cmd"
+permissions:
+  trampoline.cmd:
+    default: op

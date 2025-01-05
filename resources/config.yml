@@ -1,0 +1,5 @@
+# The throw power applied to players when they step on the trampoline
+throwPower: 2.0
+
+# Enable or disable slime particles when the player jumps
+enableSlimeParticles: true
