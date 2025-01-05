@@ -6,11 +6,14 @@ namespace Trampoline\commands;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\plugin\PluginOwned;
 use pocketmine\player\Player;
 use Trampoline\Main;
 use Trampoline\listeners\EventListener;
+use pocketmine\plugin\PluginOwnedTrait;
 
-class TrampolineCommand extends Command {
+class TrampolineCommand extends Command implements PluginOwned {
+    use PluginOwnedTrait;
 
     private Main $plugin;
 
@@ -22,29 +25,27 @@ class TrampolineCommand extends Command {
             ["tramp"]
         );
         $this->plugin = $plugin;
-
-        // Normally, you can still set a permission here if you want:
         $this->setPermission("trampoline.cmd");
+        $this->owningPlugin = $plugin; // Required for PluginOwnedTrait
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) {
-        // Instead of $this->getPermission(), directly check "trampoline.cmd"
-        if(!$sender->hasPermission("trampoline.cmd")){
+        if (!$sender->hasPermission("trampoline.cmd")) {
             $sender->sendMessage($this->plugin->getMessage("no-permission"));
             return;
         }
 
-        if(!$sender instanceof Player) {
+        if (!$sender instanceof Player) {
             $sender->sendMessage($this->plugin->getMessage("only-in-game"));
             return;
         }
 
-        if(!isset($args[0])) {
+        if (!isset($args[0])) {
             $sender->sendMessage($this->plugin->getMessage("usage"));
             return;
         }
 
-        switch(strtolower($args[0])) {
+        switch (strtolower($args[0])) {
             case "set":
                 $this->handleSet($sender, $args);
                 break;
@@ -72,12 +73,12 @@ class TrampolineCommand extends Command {
     }
 
     private function handleSet(Player $player, array $args): void {
-        if(isset(EventListener::$setModePlayers[$player->getName()])) {
+        if (isset(EventListener::$setModePlayers[$player->getName()])) {
             $player->sendMessage($this->plugin->getMessage("already-in-set-mode"));
             return;
         }
 
-        if(!isset($args[1]) || !is_numeric($args[1])) {
+        if (!isset($args[1]) || !is_numeric($args[1])) {
             $player->sendMessage($this->plugin->getMessage("usage"));
             return;
         }
@@ -91,7 +92,7 @@ class TrampolineCommand extends Command {
     }
 
     private function handleRemove(Player $player, array $args): void {
-        if(!isset($args[1]) || !is_numeric($args[1])) {
+        if (!isset($args[1]) || !is_numeric($args[1])) {
             $player->sendMessage($this->plugin->getMessage("usage"));
             return;
         }
@@ -100,7 +101,7 @@ class TrampolineCommand extends Command {
         $cfg = $this->plugin->getTrampolinesConfig();
         $tramps = $cfg->get("trampolines", []);
 
-        if(!isset($tramps[$id])) {
+        if (!isset($tramps[$id])) {
             $player->sendMessage($this->plugin->getMessage("remove-fail", ["id" => $id]));
             return;
         }
@@ -112,8 +113,7 @@ class TrampolineCommand extends Command {
     }
 
     private function handleEdit(Player $player, array $args): void {
-        // Example usage: /trampoline edit <ID> <throwPower> <enableSlimeParticles(true/false)>
-        if(!isset($args[1]) || !is_numeric($args[1])) {
+        if (!isset($args[1]) || !is_numeric($args[1])) {
             $player->sendMessage($this->plugin->getMessage("usage"));
             return;
         }
@@ -122,12 +122,11 @@ class TrampolineCommand extends Command {
         $cfg = $this->plugin->getTrampolinesConfig();
         $tramps = $cfg->get("trampolines", []);
 
-        if(!isset($tramps[$id])) {
+        if (!isset($tramps[$id])) {
             $player->sendMessage($this->plugin->getMessage("edit-fail"));
             return;
         }
 
-        // Currently we don't store per-trampoline power. This is just a placeholder.
         $player->sendMessage($this->plugin->getMessage("edit-success", ["id" => $id]));
     }
 
@@ -135,12 +134,12 @@ class TrampolineCommand extends Command {
         $cfg = $this->plugin->getTrampolinesConfig();
         $tramps = $cfg->get("trampolines", []);
 
-        if(count($tramps) === 0) {
+        if (count($tramps) === 0) {
             $player->sendMessage($this->plugin->getMessage("no-trampolines"));
             return;
         }
 
-        foreach($tramps as $id => $data) {
+        foreach ($tramps as $id => $data) {
             $count = count($data["blocks"]);
             $world = $data["blocks"][0]["world"] ?? "unknown";
             $player->sendMessage($this->plugin->getMessage("list-format", [
@@ -152,7 +151,7 @@ class TrampolineCommand extends Command {
     }
 
     private function cancelSetMode(Player $player): void {
-        if(isset(EventListener::$setModePlayers[$player->getName()])) {
+        if (isset(EventListener::$setModePlayers[$player->getName()])) {
             unset(EventListener::$setModePlayers[$player->getName()]);
             $player->sendMessage($this->plugin->getMessage("cancel-success"));
         } else {
