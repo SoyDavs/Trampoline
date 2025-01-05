@@ -1,14 +1,20 @@
-name: Trampoline
+name: UltimateCaptcha
+main: SoyDavs\UltimateCaptcha\Main
 version: 1.0.0
-main: Trampoline\Main
-api: 5.0.0
-author: "SoyDavs"
-description: "Customizable trampolines for PocketMine-MP"
+api: [5.0.0]
+author: SoyDavs
+description: A super secure captcha plugin for PocketMine-MP 5
+
+depends:
+  - FormsUI
+
 commands:
-  trampoline:
-    description: "Main command to manage trampolines"
-    usage: "/trampoline <set|remove|edit|list> [params]"
-    permission: "trampoline.cmd"
+  captcha:
+    description: "Forces the captcha form to appear again"
+    usage: "/captcha"
+    permission: "ultimatecaptcha.command.captcha"
+
 permissions:
-  trampoline.cmd:
+  ultimatecaptcha.command.captcha:
     default: op
+    description: "Allows a player to use the /captcha command"
